@@ -22,6 +22,17 @@ public class ChatServer {
     private static final int LISTENING_PORT = 9876;
     private static ArrayBlockingQueue<ConnectionHandler> connections = new ArrayBlockingQueue<ConnectionHandler>(8);
 
+    private static String generateId() {
+        String chars = "1234567890ABCDEF";
+        String id = "";
+
+        for (int i = 0; i < 12; i++) {
+            id += chars[Math.floor(Math.random() * 16)];
+        }
+
+        return id;
+    }
+    
     public static void main(String[] args) {
 
         ServerSocket listener; // Listens for incoming connections.
@@ -35,7 +46,7 @@ public class ChatServer {
 
             while (true) {
                 socket = listener.accept();
-                ConnectionHandler conn = new ConnectionHandler(socket);
+                ConnectionHandler conn = new ConnectionHandler(socket, generateId());
                 conn.start();
             }
         } catch (Exception e) {
@@ -52,11 +63,14 @@ public class ChatServer {
      */
     private static class ConnectionHandler extends Thread {
         private Socket client;
+        private String id;
         private ObjectOutputStream os;
         private ObjectInputStream is;
 
-        ConnectionHandler(Socket socket) {
+        ConnectionHandler(Socket socket, String assignedId) {
             client = socket;
+            id = assignedId;
+            
             try {
                 // set up your streams, make sure this order is reversed on the client side!
                 os = new ObjectOutputStream(socket.getOutputStream());
