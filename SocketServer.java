@@ -20,7 +20,7 @@ import java.util.concurrent.ArrayBlockingQueue;
  */
 public class ChatServer {
     private static final int LISTENING_PORT = 9876;
-    private static ArrayBlockingQueue<ConnectionHandler> connections = new ArrayBlockingQueue<ConnectionHandler>(8);
+    private static ArrayBlockingQueue<ConnectionHandler> connections = new ArrayBlockingQueue<ConnectionHandler>(3);
 
     private static String generateId() {
         String chars = "1234567890ABCDEF";
